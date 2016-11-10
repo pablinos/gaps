@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd "$(dirname "$0")/.."
-sudo docker run -ti -e RACK_ENV=production --expose=3500 -e VIRTUAL_HOST=gaps.dsd.me -e VIRTUAL_PORT=3500 --link gaps-mongo:gaps-mongo -v $(pwd)/site.yaml:/gaps/site.yaml:ro paulbunkham/gaps $@
+sudo docker run -ti -e RACK_ENV=production --expose=3500 -e VIRTUAL_HOST=$GAPS_HOST -e VIRTUAL_PORT=3500 --link gaps-mongo:gaps-mongo -v $(pwd)/site.yaml:/gaps/site.yaml:ro paulbunkham/gaps $@
