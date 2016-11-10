@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd "$(dirname "$0")/.."
+docker run -d -e RACK_ENV=production --expose=3500 --restart=always -e VIRTUAL_HOST=$GAPS_SERVER -e VIRTUAL_PORT=3500 --link gaps-mongo:gaps-mongo -v $(pwd)/site.yaml:/gaps/site.yaml:ro --name=gaps-server paulbunkham/gaps $@
