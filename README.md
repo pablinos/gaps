@@ -2,6 +2,8 @@
 
 Easy management of your Google Apps email configuration.
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 # Overview
 
 At Stripe, we've long had many
@@ -26,7 +28,7 @@ ones.
 
 # What it looks like
 
-![Gaps](https://www.dropbox.com/s/x9y1tus9x2myjey/gaps.png?dl=1)
+![Gaps](screenshot.png)
 
 # Configuring
 
@@ -48,10 +50,10 @@ site.yaml`. You'll need:
   enabled for your Google Apps domain.
 2. Create a
    [new project](https://console.developers.google.com/project).
-3. Under the "APIs & auth" accordian for that project, select the
+3. Under the "APIs & auth" accordion for that project, select the
    "APIs" tab. Enable the Google+ API, Admin SDK, and Group Settings
    API.
-4. Under the same accordian, select the "Credentials" tab. Create a
+4. Under the same accordion, select the "Credentials" tab. Create a
    new "Web application" Client ID. Add your desired redirect URI and
    authorized origins. (In development that'll probably be
    `http://localhost:3500` and `http://localhost:3500/oauth2callback`,
@@ -68,12 +70,28 @@ Run `bundle install` to install your dependencies. Gaps should run on
 Ruby 1.9 and up. Then execute `bin/gaps_server.rb` (or
 `bin/dev-runner` if you want auto-reloading upon code changes).
 
+## Running on Heroku
+
+Just click here: [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 ## Running under Docker
 
-Because there are a lot of settings, running under Docker requires a
-configuration file. Clone this repository and execute
-`bin/docker-runner` to run the Docker image we've published with your
-`site.yaml` bind-mounted inside.
+First, you need to configure Gaps by creating a `.env` file and filling in your configuration:
+
+    ORG_DOMAIN=
+    ORG_NAME=
+    OAUTH_CLIENT_ID=
+    OAUTH_CLIENT_SECRET=
+    OAUTH_REDIRECT_URL=
+    SESSION_SECRET=
+
+To run a local development environment, you can use Docker Compose:
+
+    $ docker-compose up
+
+To run in production, you can just run the image on Docker Hub:
+
+    $ docker run -p 80:3500 --env-file=.env stripeoss/gaps
 
 # Permissions
 
@@ -81,7 +99,7 @@ Gaps uses your domain admin's credentials to perform most actions
 (listing all groups, joining a group). So permissions are entrusted to
 Gaps's business logic rather than your Google settings directly.
 
-Gaps currrently comes with two schemes to mark a list as private. Any
+Gaps currently comes with two schemes to mark a list as private. Any
 private lists are currently completely omitted from Gaps: they'll be
 left out of the directory listing, their creation won't be emailed
 about, and users won't be able to join them.
@@ -93,6 +111,7 @@ lists:
 
 - Prefixing the name with `private-`.
 - Prefixing the name with the less-cumbersome but more-obscure `acl-`.
+- Suffixing the name with `-confidential`.
 - Adding a JSON tag as the last line of the group description with a
   "display" setting as follows: `{"display": "none"}`
 
